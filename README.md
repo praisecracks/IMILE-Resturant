@@ -45,7 +45,7 @@ This application is built with a modern, production-grade tech stack prioritizin
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/imile-gastronomy.git
+   git clone https://github.com/praisecracks/IMILE-Resturant.git
    cd imile-gastronomy
    ```
 
