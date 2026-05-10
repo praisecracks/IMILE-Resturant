@@ -44,7 +44,7 @@ export default function Gallery() {
   }, []);
 
   return (
-    <section ref={triggerRef} className="bg-black relative">
+    <section id="gallery" ref={triggerRef} className="bg-black relative">
       <div className="h-screen overflow-hidden flex flex-col justify-center">
         <div className="px-6 md:px-12 mb-12 max-w-screen-2xl mx-auto w-full">
           <h2 className="text-4xl md:text-6xl font-display font-light">

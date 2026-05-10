@@ -58,7 +58,7 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between pt-12 border-t border-line gap-6">
-           <p className="text-white/20 text-[10px] uppercase tracking-[0.2em] text-center md:text-left">© 2042 ÌMÍLÈ HOSPITALITY GROUP — LAGOS • LONDON • DUBAI</p>
+           <p className="text-white/20 text-[10px] uppercase tracking-[0.2em] text-center md:text-left">© 2025 ÌMÍLÈ HOSPITALITY GROUP — LAGOS • LONDON • DUBAI</p>
            <div className="flex gap-8">
              {['Privacy', 'Legal', 'Careers'].map(link => (
                <a key={link} href="#" className="text-white/20 text-[10px] uppercase tracking-[0.2em] hover:text-gold transition-colors" rel="noopener noreferrer">{link}</a>
