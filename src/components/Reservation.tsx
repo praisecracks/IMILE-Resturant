@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import React from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -18,6 +18,24 @@ export default function Reservation() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Heading character animation
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(".reservation-heading .split-char", {
+        y: 80,
+        opacity: 0,
+        stagger: 0.02,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 70%",
+        }
+      });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,9 +89,12 @@ export default function Reservation() {
       <div className="max-w-5xl mx-auto px-6 relative z-10">
         <div className="text-center mb-24">
           <p className="text-gold uppercase tracking-[0.5em] text-[10px] font-bold mb-8">Secure Your Passage</p>
-          <h2 id="reservation-heading" className="text-5xl md:text-8xl font-display font-light leading-[0.9]">
-            BECKON THE <br />
-            <span className="text-gold italic font-serif">ZENITH</span>
+          <h2 id="reservation-heading" className="reservation-heading text-5xl md:text-8xl font-display font-light leading-[0.9]">
+            {[...'BECKON THE'].map((c,i) => <span key={i} className="split-char">{c}</span>)}
+            <br />
+            <span className="text-gold italic font-serif">
+              {[...'ZENITH'].map((c,i) => <span key={i} className="split-char">{c}</span>)}
+            </span>
           </h2>
           <p className="max-w-lg mx-auto text-white/40 text-lg font-light leading-relaxed mt-12">
             Each seating is a choreographed sequence. Attendance is strictly curated to maintain the sanctity of the experience.

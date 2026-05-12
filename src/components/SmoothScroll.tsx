@@ -9,7 +9,7 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    lenisRef.current = new Lenis({
+    const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
@@ -20,15 +20,20 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
       infinite: false,
     });
 
+    lenisRef.current = lenis;
+    // Expose Lenis globally for modal scroll lock
+    (window as any).lenis = lenis;
+
     function raf(time: number) {
-      lenisRef.current?.raf(time);
+      lenis.raf(time);
       requestAnimationFrame(raf);
     }
 
     requestAnimationFrame(raf);
 
     return () => {
-      lenisRef.current?.destroy();
+      lenis.destroy();
+      delete (window as any).lenis;
     };
   }, []);
 

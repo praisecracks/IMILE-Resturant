@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import React from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDown } from 'lucide-react';
@@ -11,27 +12,51 @@ export default function Hero() {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const spotlightRef = useRef<HTMLDivElement>(null);
+
+  // Split subtitle into words for animation
+  const subtitleWords = "Embark on a multi-sensory journey through the soul of Lagos. Where ancestral flavors meet the precision of tomorrow's luxury.".split(' ');
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current || !spotlightRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    gsap.to(spotlightRef.current, {
+      "--x": `${x}px`,
+      "--y": `${y}px`,
+      duration: 0.2,
+      ease: "power2.out",
+      overwrite: "auto"
+    });
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(titleRef.current, {
-        y: 100,
+      // Hero title character reveal
+      gsap.from(".split-char", {
+        y: "100%",
         opacity: 0,
-        duration: 2,
-        ease: 'expo.out',
+        stagger: 0.05,
+        duration: 1.5,
+        ease: "expo.out",
         delay: 0.5,
       });
 
-      gsap.from(subRef.current, {
+      // Hero subtitle word reveal
+      gsap.from(".split-word", {
         y: 30,
         opacity: 0,
-        duration: 1.5,
-        ease: 'power3.out',
+        stagger: 0.04,
+        duration: 1,
+        ease: "power3.out",
         delay: 1.2,
       });
 
       gsap.to(bgRef.current, {
         yPercent: 30,
+        scale: 1.15,
+        rotation: 0.5,
         ease: 'none',
         scrollTrigger: {
           trigger: containerRef.current,
@@ -49,6 +74,7 @@ export default function Hero() {
     <section 
       ref={containerRef}
       className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden"
+      onMouseMove={handleMouseMove}
     >
       <div 
         ref={bgRef}
@@ -65,6 +91,18 @@ export default function Hero() {
         />
       </div>
 
+      {/* Mouse spotlight effect */}
+      <div
+        ref={spotlightRef}
+        className="absolute inset-0 pointer-events-none z-10"
+        style={{
+          '--x': '50%',
+          '--y': '50%',
+          background: 'radial-gradient(circle 500px at var(--x) var(--y), rgba(217,140,69,0.15), transparent 40%)',
+          mixBlendMode: 'overlay'
+        } as React.CSSProperties}
+      />
+
       <div className="hidden lg:block absolute right-12 top-1/2 -translate-y-1/2 overflow-visible z-30">
         <div className="flex flex-col gap-8 items-center text-[10px] uppercase tracking-[0.4em] text-gold/40 [writing-mode:vertical-rl]">
            <span>6.4253° N, 3.4419° E</span>
@@ -80,25 +118,35 @@ export default function Hero() {
           ref={titleRef}
           className="text-7xl md:text-[140px] lg:text-[160px] leading-[0.8] font-black tracking-[-0.05em]"
         >
-          ÀSÀ<br />
+          {['À','S','À'].map((char, i) => (
+            <span key={i} className="split-char">{char}</span>
+          ))}
+          <br />
           <span className="text-gold italic font-serif lowercase tracking-normal text-[0.4em] md:text-[0.3em] block mt-4">heritage reborn</span>
-          TÒNÍ
+          {['T','Ò','N','Í'].map((char, i) => (
+            <span key={`bottom-${i}`} className="split-char">{char}</span>
+          ))}
         </h1>
         
         <p ref={subRef} className="max-w-md mt-10 text-lg md:text-xl text-white/70 font-light leading-relaxed">
-          Embark on a multi-sensory journey through the soul of Lagos. Where ancestral flavors meet the precision of tomorrow's luxury.
+          {subtitleWords.map((word, i) => (
+            <span key={i} className="split-word">{word}{i < subtitleWords.length - 1 ? ' ' : ''}</span>
+          ))}
         </p>
 
         <div className="flex items-center gap-8 mt-12">
           <a href="#reservations" className="pill-btn">
             Reserve Now
           </a>
-          <div className="group flex items-center gap-4 cursor-pointer">
+          <a
+            href="#experience"
+            className="group flex items-center gap-4 cursor-pointer"
+          >
             <div className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center group-hover:bg-gold group-hover:text-black transition-all">
-               <ChevronDown size={14} />
+              <ChevronDown size={14} />
             </div>
             <span className="text-[10px] uppercase tracking-widest font-bold text-white/40 group-hover:text-white transition-colors">The Experience</span>
-          </div>
+          </a>
         </div>
       </div>
 

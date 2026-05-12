@@ -14,6 +14,8 @@ export default function About() {
     const ctx = gsap.context(() => {
       gsap.to(imgRef.current, {
         y: -100,
+        scale: 1.1,
+        rotation: -0.3,
         ease: 'none',
         scrollTrigger: {
           trigger: containerRef.current,
@@ -32,6 +34,19 @@ export default function About() {
         scrollTrigger: {
           trigger: textRef.current,
           start: 'top 80%',
+        }
+      });
+
+      // Heading character split animation
+      gsap.from(".split-title .split-char", {
+        y: "100%",
+        opacity: 0,
+        stagger: 0.04,
+        duration: 1.2,
+        ease: "power4.out",
+        scrollTrigger: {
+          trigger: textRef.current,
+          start: "top 75%",
         }
       });
     }, containerRef);
@@ -58,11 +73,19 @@ export default function About() {
           </div>
         </div>
 
-        <div ref={textRef}>
-          <p className="about-text-line text-xs uppercase tracking-[0.5em] text-gold mb-8 inline-block border-b border-gold/30 pb-2">The Digital Ancestry</p>
-          <h2 className="about-text-line text-5xl md:text-8xl font-display font-light mb-12 leading-[0.95]">
-            FROM <span className="text-gold italic font-serif">ÀRÈWÀ</span> TO ATELIER
-          </h2>
+          <div ref={textRef}>
+            <p className="about-text-line text-xs uppercase tracking-[0.5em] text-gold mb-8 inline-block border-b border-gold/30 pb-2">The Digital Ancestry</p>
+            <h2 className="split-title text-5xl md:text-8xl font-display font-light mb-12 leading-[0.95]">
+              {['F','R','O','M'].map((c,i) => <span key={`from-${i}`} className="split-char">{c}</span>)}
+              {' '}
+              <span className="text-gold italic font-serif">
+                {['À','R','È','W','À'].map((c,i) => <span key={`arewa-${i}`} className="split-char">{c}</span>)}
+              </span>
+              {' '}
+              {['T','O'].map((c,i) => <span key={`to-${i}`} className="split-char">{c}</span>)}
+              {' '}
+              {['A','T','E','L','I','E','R'].map((c,i) => <span key={`atelier-${i}`} className="split-char">{c}</span>)}
+            </h2>
           <div className="space-y-6 text-white/60 text-xl font-light leading-relaxed max-w-xl">
              <p className="about-text-line">ÌMÍLÈ is a tribute to the eternal radiance of West African heritage. We don't just serve food; we archive culture through crystals, foam, and fire.</p>
              <p className="about-text-line">Born on the rooftops of Victoria Island, our mission is to translate the rhythmic heartbeat of Lagos into a language of luxury. Every plate is a quantum leap into the future of African dining.</p>

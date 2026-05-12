@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import React from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Sparkles, UtensilsCrossed, Wine, Zap } from 'lucide-react';
@@ -36,26 +37,67 @@ const experiences = [
 export default function Experience() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const items = gsap.utils.toArray('.exp-card');
-      items.forEach((item: any, i) => {
-        gsap.from(item, {
-          y: 100,
-          opacity: 0,
-          duration: 1.2,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: item,
-            start: 'top bottom-=100',
-            toggleActions: 'play none none reverse',
-          }
-        });
-      });
-    }, scrollRef);
+  // Tilt card handlers
+  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+    gsap.to(card, {
+      rotationX: rotateX,
+      rotationY: rotateY,
+      transformPerspective: 1000,
+      duration: 0.4,
+      ease: "power2.out",
+    });
+  };
 
-    return () => ctx.revert();
-  }, []);
+  const handleCardMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    gsap.to(e.currentTarget, {
+      rotationX: 0,
+      rotationY: 0,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+  };
+
+   useEffect(() => {
+     const ctx = gsap.context(() => {
+       const items = gsap.utils.toArray('.exp-card');
+       items.forEach((item: any, i) => {
+         gsap.from(item, {
+           y: 100,
+           opacity: 0,
+           duration: 1.2,
+           ease: 'power3.out',
+           scrollTrigger: {
+             trigger: item,
+             start: 'top bottom-=100',
+             toggleActions: 'play none none reverse',
+           }
+         });
+       });
+
+       // Heading character split animation
+       gsap.from(".split-title .split-char", {
+         y: 50,
+         opacity: 0,
+         stagger: 0.03,
+         duration: 1,
+         ease: "power3.out",
+         scrollTrigger: {
+           trigger: scrollRef.current,
+           start: "top 70%",
+         }
+       });
+     }, scrollRef);
+
+     return () => ctx.revert();
+   }, []);
 
   return (
     <section id="experience" ref={scrollRef} className="py-32 px-6 md:px-12 bg-charcoal relative overflow-hidden">
@@ -64,8 +106,16 @@ export default function Experience() {
       <div className="max-w-screen-2xl mx-auto">
         <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div className="max-w-2xl">
-            <h2 className="text-5xl md:text-7xl font-display font-light mb-6">
-              THE <span className="text-gold italic font-serif">ÌMÍLÈ</span><br />PHILOSOPHY
+            <h2 className="split-title text-5xl md:text-7xl font-display font-light mb-6">
+              {['T','H','E'].map((c,i) => <span key={i} className="split-char">{c}</span>)}
+              {' '}
+              <span className="text-gold italic font-serif">
+                {['Ì','M','Í','L','È'].map((c,i) => <span key={i} className="split-char">{c}</span>)}
+              </span>
+              <br />
+              {['P','H','I','L','O','S','O','P','H','Y'].map((c,i) => (
+                <span key={`phi-${i}`} className="split-char">{c}</span>
+              ))}
             </h2>
             <p className="text-white/60 text-lg md:text-xl font-light leading-relaxed">
               Elevating the Nigerian culinary narrative to a global zenith. We fuse high-society Lagos luxury with the avant-garde spirit of future Africa.
@@ -77,11 +127,13 @@ export default function Experience() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12" style={{ perspective: '1000px' }}>
           {experiences.map((exp, i) => (
             <div 
               key={i} 
               className="exp-card group relative h-[500px] overflow-hidden rounded-[2rem] border border-white/5"
+              onMouseMove={handleCardMouseMove}
+              onMouseLeave={handleCardMouseLeave}
             >
               <SafeImage
                 src={exp.img}

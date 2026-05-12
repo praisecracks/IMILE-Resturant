@@ -138,3 +138,29 @@ select.appearance-none {
   background-position: right 1rem center;
   background-size: 1rem;
 }
+
+/* Animated nav link underline */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-gold);
+  transition: transform 0.3s ease;
+  transform-origin: center;
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* Text splitting utility */
+.split-char, .split-word {
+  display: inline-block;
+}

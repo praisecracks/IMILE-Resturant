@@ -22,13 +22,13 @@ export default function Navbar() {
 
   return (
     <>
-      <nav 
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 px-6 md:px-12 py-6 ${
-          isScrolled ? 'glass-dark py-4' : 'bg-transparent'
-        }`}
-        role="navigation"
-        aria-label="Main navigation"
-      >
+       <nav 
+         className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 px-6 md:px-12 ${
+           isScrolled ? 'bg-black/50 backdrop-blur-lg py-4' : 'bg-transparent py-6'
+         }`}
+         role="navigation"
+         aria-label="Main navigation"
+       >
         <div className="max-w-screen-2xl mx-auto flex items-center justify-between">
           <a href="#" className="flex items-center gap-3 group" aria-label="ÌMÍLÈ Home">
             <span className="font-display font-black text-2xl tracking-[0.3em] text-white">
@@ -41,7 +41,7 @@ export default function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                className="text-[11px] uppercase tracking-[0.2em] text-white/50 hover:text-gold transition-colors relative group"
+                className="text-[11px] uppercase tracking-[0.2em] text-white/50 hover:text-gold transition-colors relative group nav-link"
               >
                 {link.name}
               </a>
